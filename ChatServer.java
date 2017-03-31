@@ -1,10 +1,32 @@
 import java.net.*;
 import java.io.*;
 
-public class HtmlOutput
+public class ChatServer
 {  Socket          socket   = null;
    ServerSocket    server   = null;
    DataInputStream streamIn =  null;
+
+   private String readFile(String filename)
+	{
+	  String records = "";
+	  try
+	  {
+	    BufferedReader reader = new BufferedReader(new FileReader(filename));
+	    String line;
+	    while ((line = reader.readLine()) != null)
+	    {
+	      records+=line;
+	    }
+	    reader.close();
+	    return records;
+	  }
+	  catch (Exception e)
+	  {
+	    System.err.format("Exception occurred trying to read '%s'.", filename);
+	    e.printStackTrace();
+	    return null;
+	  }
+	}
 
    public ChatServer(int port)
    {  try
@@ -40,7 +62,7 @@ public class HtmlOutput
          out.println("HTTP/1.1 200 OK");
          out.println("Content-Type: text/html");
          out.println("\r\n");
-         out.println("<p> Hello world </p>");
+         out.println(readFile("index.html"));
          out.flush();
 
          out.close();
