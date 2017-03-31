@@ -1,7 +1,7 @@
 import java.net.*;
 import java.io.*;
 
-public class ChatServer
+public class BasicServer
 {  Socket          socket   = null;
    ServerSocket    server   = null;
    DataInputStream streamIn =  null;
