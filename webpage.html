@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<form>
+  Group ID:<br>
+  <input id = "id" type="text" name="id"><br>
+  Message:<br>
+  <input id = "msg" type="password" name="msg"><br>
+  <button onclick = "myFunction()" id = "bt" type = "submit">Send</button>
+</form>
+<p id = "demo"></p>
+<script>
+function myFunction() {
+    var x = document.getElementById("msg").value;
+    document.getElementById("demo").innerHTML = x;
+}
+</script>
+
+<br><br><br>
+<form action="contactForm" method="post">
+    <table class="form">
+        <tr>
+            <th><label for="name"> Name </label></th>
+            <td><input class="input_full" type="text" id="name" name="name" />
+
+            </td>
+        </tr>
+        <tr>
+            <th><label for="email"> Email </label></th>
+            <td><input class="input_full" type="email" id="email"
+                name="email" /></td>
+        </tr>
+
+        <tr>
+            <th><label for="description"> Description </label></th>
+            <td><input class="input_full" type="text" id="description"
+                name="description" /></td>
+        </tr>
+        
+        <tr>
+            <th><label for="id"> ID number </label></th>
+            <td><input class="input_full" type="number" id="id"
+                name="id" /></td>
+        </tr>
+    </table>
+
+    <p>
+        <input type="submit" value="Send" /> <input type="reset"
+            value="Reset">
+    </p>
+</form>
+
+</body>
+</html>
