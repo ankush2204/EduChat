@@ -52,13 +52,17 @@ public class ChatServer implements Runnable
             while (!done)
             {  try
                {  
-                String str;
+                String str,str2;
                br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                str = br.readLine();
- 
-               int len = str.length();
-               String str2 = str.substring(5,len-9);
+               try{
+                  str2 = str.substring(5,str.length()-9);
+               }
+               catch(NullPointerException exc){
+                  str2 = "Nothing..";
+               }
                
+               /*    *****IGNORING FAVICON.ICO*****
                int flag = 0;
                String str3="favicon.ico";
                for(int i=0;i<str3.length()&&i<str2.length()&&flag<1;i++){
@@ -67,9 +71,18 @@ public class ChatServer implements Runnable
                   }
                }
                System.out.println(flag);  
+               */
+               
+               /*  *****EXTRACTING URL PARAMETERS*****
+               String url[] = str2.split("?");
+               String pairs[] = url[1].split("&");
+               String pair1[] = pairs[0].split("=");
+               String pair2[] = pairs[1].split("=");
+               System.out.println(pair1[0]+" = "+pair1[1]);
+               System.out.println(pair2[0]+" = "+pair2[1]);
+               */
 
                
-               if(flag>0){
                   System.out.println("Client sent - " + str2); 
                   
                   out.println("HTTP/1.1 200 OK");
@@ -78,20 +91,21 @@ public class ChatServer implements Runnable
                   out.println(readFile("webpage.html"));
                   out.flush();
                   out.close();
-                  }
-               if(flag == 0){System.out.println("Ignoring favicon.ico");}
+                
                }
                catch(IOException ioe)
                {  done = true;
                   System.out.println(ioe);
                }
             }
+
             out.flush();
             out.close();
-            close();
+            
          }
          catch(IOException ie)
-         {  System.out.println("Acceptance Error: " + ie);  }
+         {  
+          System.out.println("Acceptance Error: " + ie);  }
       }
    }
    public void start()
