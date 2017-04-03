@@ -1,3 +1,4 @@
+import edupack.*;
 import java.net.*;
 import java.io.*;
  
@@ -6,6 +7,8 @@ public class ChatServer implements Runnable
    ServerSocket    server   = null;
    DataInputStream streamIn =  null;
    Thread thread = null;
+
+
    private String readFile(String filename)
    {
      String records = "";
@@ -27,7 +30,7 @@ public class ChatServer implements Runnable
        return null;
      }
    }
- 
+    
    public ChatServer(int port)
    {  try
       {  System.out.println("Binding to port " + port + ", please wait  ...");
@@ -62,16 +65,14 @@ public class ChatServer implements Runnable
                   str2 = "Nothing..";
                }
                
-               /*    *****IGNORING FAVICON.ICO*****
+               /*    *****IGNORING FAVICON.ICO*****    */
                int flag = 0;
-               String str3="favicon.ico";
+               String str3="favicon.ico",url,id="",msg="";
                for(int i=0;i<str3.length()&&i<str2.length()&&flag<1;i++){
                   if(str3.charAt(i)!=str2.charAt(i)){
                      flag=1;     
                   }
-               }
-               System.out.println(flag);  
-               */
+               }  
                
                /*  *****EXTRACTING URL PARAMETERS*****
                String url[] = str2.split("?");
@@ -81,26 +82,39 @@ public class ChatServer implements Runnable
                System.out.println(pair1[0]+" = "+pair1[1]);
                System.out.println(pair2[0]+" = "+pair2[1]);
                */
+                  if(flag==0){System.out.println("favicon bkl");}
+                  if(flag==1){
+                    System.out.println("Client sent - " + str2); 
+                    url = str2;
+                    int i=0;
+                    for(i=0;i<url.length()&&flag<1;i++){
+                      if(url.charAt(i)=='?')flag=1;
+                    }
+                    String s1 = url.substring(i,url.length());
+                    String pairs[] = s1.split("&");
+                    String pair1[] = pairs[0].split("=");
+                    String pair2[] = pairs[1].split("=");
+                    System.out.println(pair1[0]+" = "+pair1[1]);
+                    System.out.println(pair2[0]+" = "+pair2[1]);  
+                    id = pair1[1];
+                    msg=pair2[1];
+                    edupack.EditFile.addMessage(id,msg);
+                  }
 
-               
-                  System.out.println("Client sent - " + str2); 
-                  
                   out.println("HTTP/1.1 200 OK");
                   out.println("Content-Type: text/html");
                   out.println("\r\n");
                   out.println(readFile("webpage.html"));
+                  out.println(readFile(id+".txt"));
+                  out.println("<//body><//html>");
                   out.flush();
                   out.close();
-                
                }
                catch(IOException ioe)
                {  done = true;
                   System.out.println(ioe);
                }
             }
-
-            out.flush();
-            out.close();
             
          }
          catch(IOException ie)
@@ -108,6 +122,7 @@ public class ChatServer implements Runnable
           System.out.println("Acceptance Error: " + ie);  }
       }
    }
+
    public void start()
    {  if (thread == null)
       {  thread = new Thread(this); 
