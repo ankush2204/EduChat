@@ -28,7 +28,7 @@ public class BasicServer
 	  }
 	}
 
-   public ChatServer(int port)
+   public BasicServer(int port)
    {  try
       {  System.out.println("Binding to port " + port + ", please wait  ...");
          server = new ServerSocket(port);  
@@ -62,7 +62,7 @@ public class BasicServer
          out.println("HTTP/1.1 200 OK");
          out.println("Content-Type: text/html");
          out.println("\r\n");
-         out.println(readFile("index.html"));
+         out.println(readFile("webpage.html"));
          out.flush();
 
          out.close();
@@ -81,10 +81,10 @@ public class BasicServer
       if (streamIn != null)  streamIn.close();
    }
    public static void main(String args[])
-   {  ChatServer server = null;
+   {  BasicServer server = null;
       if (args.length != 1)
-         System.out.println("Usage: java ChatServer port");
+         System.out.println("Usage: java BasicServer port");
       else
-         server = new ChatServer(Integer.parseInt(args[0]));
+         server = new BasicServer(Integer.parseInt(args[0]));
    }
 }
