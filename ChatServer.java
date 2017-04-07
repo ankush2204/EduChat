@@ -55,6 +55,7 @@ public class ChatServer implements Runnable
             while (!done)
             {  try
                {  
+                System.out.println("Thread name = "+thread.getName());
                 String str,str2;
                br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                str = br.readLine();
@@ -90,22 +91,24 @@ public class ChatServer implements Runnable
                     for(i=0;i<url.length()&&flag<1;i++){
                       if(url.charAt(i)=='?')flag=1;
                     }
+                    try{
                     String s1 = url.substring(i,url.length());
                     String pairs[] = s1.split("&");
                     String pair1[] = pairs[0].split("=");
                     String pair2[] = pairs[1].split("=");
                     System.out.println(pair1[0]+" = "+pair1[1]);
-                    System.out.println(pair2[0]+" = "+pair2[1]);  
+                    System.out.println(pair2[0]+" = "+pair2[1]);
                     id = pair1[1];
                     msg=pair2[1];
                     edupack.EditFile.addMessage(id,msg);
+                    }catch(Exception e) {System.out.println("error");}
                   }
 
                   out.println("HTTP/1.1 200 OK");
                   out.println("Content-Type: text/html");
                   out.println("\r\n");
-                  out.println(readFile("webpage.html"));
-                  out.println(readFile(id+".txt"));
+                  out.println(readFile("index.html"));
+                  try{out.println(readFile(id+".txt"));}catch(Exception e){System.out.println("error");}
                   out.println("<//body><//html>");
                   out.flush();
                   out.close();
